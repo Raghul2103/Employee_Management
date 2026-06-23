@@ -51,6 +51,10 @@ app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/employees', employeeRoutes);
 app.use('/api/v1/analytics', analyticsRoutes);
 
+app.use('/api/auth', authRoutes);
+app.use('/api/employees', employeeRoutes);
+app.use('/api/analytics', analyticsRoutes);
+
 // Test Route
 app.get('/', (req, res) => {
   res.json({ message: 'Employee Management API is running...' });
