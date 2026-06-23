@@ -14,10 +14,27 @@ connectDB();
 const app = express();
 
 // Middlewares
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'http://localhost:3000',
+];
+
 app.use(cors({
-  origin: '*', // For development, allow all origins
+  origin: (origin, callback) => {
+    // Allow all origins in development mode
+    if (process.env.NODE_ENV === 'development') {
+      return callback(null, true);
+    }
+    // In production, validate against allowed list or FRONTEND_URL env var
+    if (!origin || allowedOrigins.includes(origin) || origin === process.env.FRONTEND_URL) {
+      return callback(null, true);
+    }
+    return callback(new Error('Not allowed by CORS'));
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
 }));
 
 app.use(express.json());
